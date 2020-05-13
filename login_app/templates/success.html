@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        <style>
+            p{
+                color: black;
+                font-size: 16pt;
+            }
+            h2{
+                color: white;
+            }
+        body{
+            background-color: black;
+            padding: 25px;
+            margin: 25px;
+            min-height: 100px;
+        }
+        #posts {
+            background-color: burlywood;
+            padding: 25px;
+            margin: 25px;
+            
+        }
+        .one_post {
+        background-color: teal;
+        padding: 25px;
+        margin: 25px;
+        min-height: 100px;
+        
+        } 
+        .posting{
+        font-size: 16pt;
+        /* text-align: center; */
+        }
+        .poster {
+        font-size: 15pt;
+        /* text-align: center; */
+        }
+        #tag{
+            padding: 25px;
+            margin: 25px;
+            min-height: 100px;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="tag">
+            <a href="/logout">Logout</a>
+            <h1>Welcome {{request.session.user}}</h1>
+            <h2>Write a Quote :</h2>
+            <form action="/process_message" method="POST">
+                {% csrf_token %}
+                <input type="text" name='mess' textarea cols="30" rows="30">
+                <input type="submit" value="Post"></div>
+            </form>
+        </div>     
+
+        <div id="post">
+            {% for post in messages %}
+            <div class="one_post">
+                <p class="posting">Post By:<a href="/profile/{{post.poster.id}}">{{post.poster.first_name}} {{post.poster.last_name}}</a></p>
+                <p class="poster">{{post.message}}</p>
+                 <a href="/like/{{post.id}}">Like</a>
+                 <p>{{ post.likes.count }}</p>   
+
+                <form action="/post_comment/{{post.id}}" method="POST">
+                    {% csrf_token %}
+                    Comment: <input type="text" name="comment">
+                    <input type="submit" value="sumbit">
+                </form>
+                {% for comment in post.post_comments.all %}
+                    <p>{{comment.comment}}</p>
+                    <p>posted By: {{comment.poster.first_name}} {{comment.poster.last_name}}</p>
+                    <a href="/delete/{{comment.id}}">Delete</a>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>    
+    </body>
+</html>

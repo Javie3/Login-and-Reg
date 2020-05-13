@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Info</title>
+        <style>
+            body{
+                /* text-align: center; */
+                background-color: #011627;
+                font-family: sans-serif;  
+            }
+            p{
+                color: white;
+                font-size: 16pt;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Welcome, {{user.first_name}} {{user.last_name}}</h1>
+
+        {% for post in user.user_messages.all %}
+        <p>{{post.message}}</p>
+        {% endfor %}
+
+        {% for comment in user.user_comments.all %}
+        <p>{{comment.comment}}</p>
+        {% endfor %}
+
+        <p>Edit User:</p>
+        <form action="/edit/{{user.id}}" method="POST">
+            {% csrf_token %}
+        <p>First Name: <input type="text" name="fname"></p>
+        <p>Last Name: <input type="text" name="lname"></p>
+        <p>Email: <input type="text" name="email"></p> 
+        </form>
+    </body>
+</html>
